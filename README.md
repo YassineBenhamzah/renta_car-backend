@@ -1,73 +1,76 @@
+<div align="center">
+
 # 🚗 RentaCar — Backend API
 
-> RESTful API for a car rental management platform, built with **Laravel 12** and secured with **Laravel Sanctum**.
+**A production-ready car rental management REST API**
 
-[![Laravel](https://img.shields.io/badge/Laravel-12-red?logo=laravel)](https://laravel.com)
-[![PHP](https://img.shields.io/badge/PHP-8.2+-blue?logo=php)](https://php.net)
-[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)](https://docker.com)
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
+[![Sanctum](https://img.shields.io/badge/Sanctum-Auth-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com/docs/sanctum)
 
----
+[Frontend Repo](https://github.com/YassineBenhamzah/renta_car-frontend) · [Report Bug](https://github.com/YassineBenhamzah/renta_car-backend/issues) · [API Docs](#-api-endpoints)
 
-## 📌 Overview
-
-RentaCar is a full-stack car rental system. This repository contains the **backend API** which handles authentication, car management, rental bookings, payments, and admin analytics.
-
-The frontend is hosted separately → [renta_car-frontend](https://github.com/YassineBenhamzah/renta_car-frontend)
+</div>
 
 ---
 
-## ✨ Features
+## 📌 About The Project
 
-### 🔐 Authentication
+**RentaCar** is a full-stack car rental management system designed for rental agencies. It provides a complete backend REST API that powers:
 
-- User registration & login with **Laravel Sanctum** token authentication
-- Role-based access control: `admin`, `agent`, `user`
+- A **public catalog** where customers browse and check car availability
+- A **user portal** for making bookings, uploading payments & downloading contracts
+- An **agent panel** for managing rentals and on-site bookings
+- An **admin dashboard** with analytics, user management, and full control
 
-### 🚘 Car Management
+> 🔗 Frontend (React 18 + Vite) → [renta_car-frontend](https://github.com/YassineBenhamzah/renta_car-frontend)
 
-- Public car listing with filters (brand, category, price range, date availability)
-- Car detail and availability calendar
-- Add / Edit / Delete cars (admin & agent only)
-- Image upload support
+---
 
-### 📋 Rental System
+## ✨ Key Features
 
-- Users submit rental requests with date selection
-- Agents/Admins approve, reject, activate or complete rentals
-- On-site booking by agents for walk-in customers
-- PDF rental contract generation & download
+| Feature                      | Description                                                           |
+| ---------------------------- | --------------------------------------------------------------------- |
+| 🔐 **Auth System**           | Register, login, logout with Sanctum token-based auth                 |
+| 👥 **3 Roles**               | `admin`, `agent`, `user` — each with different permissions            |
+| 🚘 **Car Catalog**           | Listing with filters: brand, category, price range, date availability |
+| 📅 **Availability Calendar** | Real-time booked dates per car                                        |
+| 📋 **Rental Workflow**       | Request → Approve → Activate → Complete or Cancel                     |
+| 💳 **Payment Upload**        | Users upload payment proof, agents verify it                          |
+| 📝 **PDF Contracts**         | Auto-generated rental contract downloadable as PDF                    |
+| 🧑‍💼 **On-Site Booking**       | Agents create bookings for walk-in customers directly                 |
+| 📊 **Admin Analytics**       | Revenue charts, top cars, rental status breakdown                     |
+| 🔔 **Notifications**         | In-app alerts for bookings, payments, status changes, expiries        |
 
-### 💳 Payments
+---
 
-- Users upload payment proof (image)
-- Agents/Admins can view payment proof
-- Document upload support (CIN, permis de conduire)
+## 🏗️ System Architecture
 
-### 📊 Admin Dashboard
-
-- Total stats: cars, rentals, revenue, users
-- Monthly revenue analytics (chartable data)
-- Top 5 rented cars & most profitable cars
-- Rental status breakdown
-- Filterable by date range, year, month
-
-### 🔔 Notifications
-
-- In-app notifications for: new booking, payment submitted, rental status changed, rental ending soon
-- Mark as read / Mark all as read
+```
+[React Frontend] ──── HTTPS ────► [Laravel 12 API]
+                                        │
+                    ┌───────────────────┼───────────────────┐
+                    │                   │                   │
+               [MySQL DB]       [File Storage]       [Notifications]
+               Users, Cars,     Payment proofs,      NewBooking,
+               Rentals          Documents, Images     StatusChanged...
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer            | Tech                    |
-| ---------------- | ----------------------- |
-| Framework        | Laravel 12              |
-| Auth             | Laravel Sanctum         |
-| Database         | MySQL                   |
-| File Storage     | Laravel Storage (local) |
-| PDF              | DomPDF                  |
-| Containerization | Docker + Docker Compose |
+| Layer            | Technology                   |
+| ---------------- | ---------------------------- |
+| Framework        | Laravel 12                   |
+| Authentication   | Laravel Sanctum 4.0          |
+| Database         | MySQL                        |
+| PDF Generation   | barryvdh/laravel-dompdf 3.1  |
+| File Storage     | Laravel Storage (local disk) |
+| Containerization | Docker + Docker Compose      |
+| Language         | PHP 8.2+                     |
 
 ---
 
@@ -77,16 +80,30 @@ The frontend is hosted separately → [renta_car-frontend](https://github.com/Ya
 backend/
 ├── app/
 │   ├── Http/
-│   │   ├── Controllers/        # AuthController, CarController, RentalController...
-│   │   └── Middleware/         # RoleMiddleware
-│   ├── Models/                 # User, Car, Rental
-│   └── Notifications/          # NewBooking, PaymentSubmitted, RentalStatusChanged...
+│   │   ├── Controllers/
+│   │   │   ├── AuthController.php          # register, login, logout
+│   │   │   ├── CarController.php           # CRUD + filters + availability
+│   │   │   ├── RentalController.php        # booking, status, payment, PDF
+│   │   │   ├── DashboardController.php     # admin analytics & stats
+│   │   │   ├── UserController.php          # user listing & deletion
+│   │   │   └── NotificationController.php  # in-app notifications
+│   │   └── Middleware/
+│   │       └── RoleMiddleware.php          # role:admin, role:agent
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Car.php
+│   │   └── Rental.php
+│   └── Notifications/
+│       ├── NewBooking.php
+│       ├── PaymentSubmitted.php
+│       ├── RentalStatusChanged.php
+│       └── RentalEndingSoon.php
 ├── database/
-│   ├── migrations/             # 12 migration files
+│   ├── migrations/                         # 12 migration files
 │   ├── factories/
 │   └── seeders/
 ├── routes/
-│   └── api.php                 # All API routes
+│   └── api.php                             # all API routes
 ├── Dockerfile
 └── docker-compose.yml
 ```
@@ -99,7 +116,8 @@ backend/
 
 - PHP >= 8.2
 - Composer
-- MySQL or SQLite
+- MySQL
+- Docker (optional)
 
 ### Installation
 
@@ -124,7 +142,7 @@ php artisan migrate
 php artisan serve
 ```
 
-### Run with Docker
+### 🐳 Run with Docker
 
 ```bash
 docker-compose up --build
@@ -134,46 +152,53 @@ docker-compose up --build
 
 ## 📡 API Endpoints
 
-### Public
+### 🔓 Public
 
-| Method | Endpoint                      | Description                  |
-| ------ | ----------------------------- | ---------------------------- |
-| POST   | `/api/register`               | Register a new user          |
-| POST   | `/api/login`                  | Login                        |
-| GET    | `/api/cars`                   | List all cars (with filters) |
-| GET    | `/api/cars/{id}`              | Get car detail               |
-| GET    | `/api/cars/{id}/availability` | Get booked dates             |
+| Method | Endpoint                      | Description                |
+| ------ | ----------------------------- | -------------------------- |
+| `POST` | `/api/register`               | Register a new user        |
+| `POST` | `/api/login`                  | Login & receive token      |
+| `GET`  | `/api/cars`                   | List all cars with filters |
+| `GET`  | `/api/cars/{id}`              | Get car detail             |
+| `GET`  | `/api/cars/{id}/availability` | Get booked date ranges     |
 
-### Protected (requires auth token)
+### 🔒 Protected (auth token required)
 
-| Method | Endpoint                    | Description              |
-| ------ | --------------------------- | ------------------------ |
-| POST   | `/api/logout`               | Logout                   |
-| POST   | `/api/rentals`              | Submit rental request    |
-| GET    | `/api/my-rentals`           | My rental history        |
-| POST   | `/api/rentals/{id}/payment` | Upload payment proof     |
-| GET    | `/api/rentals/{id}/pdf`     | Download PDF contract    |
-| GET    | `/api/notifications`        | Get unread notifications |
+| Method | Endpoint                       | Description               |
+| ------ | ------------------------------ | ------------------------- |
+| `POST` | `/api/logout`                  | Logout                    |
+| `POST` | `/api/rentals`                 | Submit rental request     |
+| `GET`  | `/api/my-rentals`              | My rental history         |
+| `POST` | `/api/rentals/{id}/payment`    | Upload payment proof      |
+| `GET`  | `/api/rentals/{id}/pdf`        | Download PDF contract     |
+| `GET`  | `/api/notifications`           | Get unread notifications  |
+| `POST` | `/api/notifications/{id}/read` | Mark notification as read |
+| `POST` | `/api/notifications/read-all`  | Mark all as read          |
 
-### Admin/Agent only
+### 🛡️ Agent & Admin only
 
-| Method | Endpoint                   | Description            |
-| ------ | -------------------------- | ---------------------- |
-| POST   | `/api/cars`                | Add a car              |
-| PUT    | `/api/cars/{id}`           | Update a car           |
-| DELETE | `/api/cars/{id}`           | Delete a car           |
-| GET    | `/api/rentals`             | List all rentals       |
-| PUT    | `/api/rentals/{id}/status` | Update rental status   |
-| POST   | `/api/rentals/on-site`     | Create on-site booking |
-| GET    | `/api/admin/stats`         | Dashboard analytics    |
-| GET    | `/api/users`               | List all users         |
-| DELETE | `/api/users/{id}`          | Delete a user          |
+| Method   | Endpoint                   | Description            |
+| -------- | -------------------------- | ---------------------- |
+| `POST`   | `/api/cars`                | Add a car              |
+| `PUT`    | `/api/cars/{id}`           | Update a car           |
+| `DELETE` | `/api/cars/{id}`           | Delete a car           |
+| `GET`    | `/api/rentals`             | List all rentals       |
+| `PUT`    | `/api/rentals/{id}/status` | Update rental status   |
+| `POST`   | `/api/rentals/on-site`     | Create on-site booking |
+
+### 👑 Admin only
+
+| Method   | Endpoint           | Description         |
+| -------- | ------------------ | ------------------- |
+| `GET`    | `/api/admin/stats` | Dashboard analytics |
+| `GET`    | `/api/users`       | List all users      |
+| `DELETE` | `/api/users/{id}`  | Delete a user       |
 
 ---
 
 ## 🔒 Environment Variables
 
-Copy `.env.example` to `.env` and fill in:
+Copy `.env.example` to `.env` and configure:
 
 ```env
 APP_NAME=RentaCar
@@ -182,7 +207,7 @@ APP_KEY=         # generated by: php artisan key:generate
 APP_DEBUG=true
 APP_URL=http://localhost:8000
 
-# Database — MySQL (dev & prod)
+# Database — MySQL
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -190,7 +215,7 @@ DB_DATABASE=renta_car
 DB_USERNAME=root
 DB_PASSWORD=your_password
 
-# Mail (optional — for email notifications)
+# Mail (optional)
 MAIL_MAILER=log
 MAIL_FROM_ADDRESS="hello@rentacar.com"
 MAIL_FROM_NAME="RentaCar"
@@ -203,11 +228,20 @@ FRONTEND_URL=https://your-app.vercel.app
 
 ## 📦 Deployment
 
-Hosted on **Hostinger** with CI/CD via GitHub.
+- **Backend** → hosted on **Hostinger** with CI/CD via GitHub
+- **Frontend** → hosted on **Vercel** → [renta_car-frontend](https://github.com/YassineBenhamzah/renta_car-frontend)
 
 ---
 
 ## 👤 Author
 
-**Yassine Benhamzah**  
-GitHub: [@YassineBenhamzah](https://github.com/YassineBenhamzah)
+**Yassine Benhamzah**
+
+- GitHub: [@YassineBenhamzah](https://github.com/YassineBenhamzah)
+- LinkedIn: [linkedin.com/in/your-profile](https://linkedin.com/in/your-profile)
+
+---
+
+<div align="center">
+⭐ If you found this project useful, give it a star!
+</div>
