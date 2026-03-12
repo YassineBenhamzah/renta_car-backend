@@ -238,7 +238,7 @@ FRONTEND_URL=https://your-app.vercel.app
 **Yassine Benhamzah**
 
 - GitHub: [@YassineBenhamzah](https://github.com/YassineBenhamzah)
-- LinkedIn: [linkedin.com/in/your-profile](https://linkedin.com/in/your-profile)
+- LinkedIn: https://www.linkedin.com/in/yassine-benhamzah/
 
 ---
 
