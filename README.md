@@ -1,59 +1,199 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚗 RentaCar — Backend API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> RESTful API for a car rental management platform, built with **Laravel 11** and secured with **Laravel Sanctum**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📌 Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+RentaCar is a full-stack car rental system. This repository contains the **backend API** which handles authentication, car management, rental bookings, payments, and admin analytics.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The frontend is hosted separately → [renta_car-frontend](https://github.com/YassineBenhamzah/renta_car-frontend)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ✨ Features
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🔐 Authentication
 
-## Laravel Sponsors
+- User registration & login with **Laravel Sanctum** token authentication
+- Role-based access control: `admin`, `agent`, `user`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 🚘 Car Management
 
-### Premium Partners
+- Public car listing with filters (brand, category, price range, date availability)
+- Car detail and availability calendar
+- Add / Edit / Delete cars (admin & agent only)
+- Image upload support
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 📋 Rental System
 
-## Contributing
+- Users submit rental requests with date selection
+- Agents/Admins approve, reject, activate or complete rentals
+- On-site booking by agents for walk-in customers
+- PDF rental contract generation & download
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 💳 Payments
 
-## Code of Conduct
+- Users upload payment proof (image)
+- Agents/Admins can view payment proof
+- Document upload support (CIN, permis de conduire)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 📊 Admin Dashboard
 
-## Security Vulnerabilities
+- Total stats: cars, rentals, revenue, users
+- Monthly revenue analytics (chartable data)
+- Top 5 rented cars & most profitable cars
+- Rental status breakdown
+- Filterable by date range, year, month
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 🔔 Notifications
 
-## License
+- In-app notifications for: new booking, payment submitted, rental status changed, rental ending soon
+- Mark as read / Mark all as read
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🛠️ Tech Stack
+
+| Layer            | Tech                    |
+| ---------------- | ----------------------- |
+| Framework        | Laravel 11              |
+| Auth             | Laravel Sanctum         |
+| Database         | MySQL / SQLite          |
+| File Storage     | Laravel Storage (local) |
+| PDF              | DomPDF                  |
+| Containerization | Docker + Docker Compose |
+
+---
+
+## 🗂️ Project Structure
+
+```
+backend/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/        # AuthController, CarController, RentalController...
+│   │   └── Middleware/         # RoleMiddleware
+│   ├── Models/                 # User, Car, Rental
+│   └── Notifications/          # NewBooking, PaymentSubmitted, RentalStatusChanged...
+├── database/
+│   ├── migrations/             # 12 migration files
+│   ├── factories/
+│   └── seeders/
+├── routes/
+│   └── api.php                 # All API routes
+├── Dockerfile
+└── docker-compose.yml
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- PHP >= 8.2
+- Composer
+- MySQL or SQLite
+
+### Installation
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/YassineBenhamzah/renta_car-backend.git
+cd renta_car-backend
+
+# 2. Install dependencies
+composer install
+
+# 3. Copy environment file
+cp .env.example .env
+
+# 4. Generate app key
+php artisan key:generate
+
+# 5. Configure your DB in .env, then run migrations
+php artisan migrate
+
+# 6. Start the server
+php artisan serve
+```
+
+### Run with Docker
+
+```bash
+docker-compose up --build
+```
+
+---
+
+## 📡 API Endpoints
+
+### Public
+
+| Method | Endpoint                      | Description                  |
+| ------ | ----------------------------- | ---------------------------- |
+| POST   | `/api/register`               | Register a new user          |
+| POST   | `/api/login`                  | Login                        |
+| GET    | `/api/cars`                   | List all cars (with filters) |
+| GET    | `/api/cars/{id}`              | Get car detail               |
+| GET    | `/api/cars/{id}/availability` | Get booked dates             |
+
+### Protected (requires auth token)
+
+| Method | Endpoint                    | Description              |
+| ------ | --------------------------- | ------------------------ |
+| POST   | `/api/logout`               | Logout                   |
+| POST   | `/api/rentals`              | Submit rental request    |
+| GET    | `/api/my-rentals`           | My rental history        |
+| POST   | `/api/rentals/{id}/payment` | Upload payment proof     |
+| GET    | `/api/rentals/{id}/pdf`     | Download PDF contract    |
+| GET    | `/api/notifications`        | Get unread notifications |
+
+### Admin/Agent only
+
+| Method | Endpoint                   | Description            |
+| ------ | -------------------------- | ---------------------- |
+| POST   | `/api/cars`                | Add a car              |
+| PUT    | `/api/cars/{id}`           | Update a car           |
+| DELETE | `/api/cars/{id}`           | Delete a car           |
+| GET    | `/api/rentals`             | List all rentals       |
+| PUT    | `/api/rentals/{id}/status` | Update rental status   |
+| POST   | `/api/rentals/on-site`     | Create on-site booking |
+| GET    | `/api/admin/stats`         | Dashboard analytics    |
+| GET    | `/api/users`               | List all users         |
+| DELETE | `/api/users/{id}`          | Delete a user          |
+
+---
+
+## 🔒 Environment Variables
+
+Copy `.env.example` to `.env` and fill in:
+
+```
+APP_URL=http://localhost:8000
+FRONTEND_URL=https://your-vercel-url.vercel.app
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=renta_car
+DB_USERNAME=root
+DB_PASSWORD=
+
+SANCTUM_STATEFUL_DOMAINS=your-vercel-url.vercel.app
+```
+
+---
+
+## 📦 Deployment
+
+Hosted on **Hostinger** with CI/CD via GitHub.
+
+---
+
+## 👤 Author
+
+**Yassine Benhamzah**  
+GitHub: [@YassineBenhamzah](https://github.com/YassineBenhamzah)
